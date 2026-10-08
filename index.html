@@ -55,6 +55,21 @@ th{font-weight:500;color:var(--mute);font-size:11px;letter-spacing:.06em}
 td.aim{font-family:var(--display);color:var(--lamp);white-space:nowrap;font-size:15px}
 tr.hit td{background:var(--ok-bg)} tr.hit td.aim{color:var(--ok)}
 tr.near td{background:var(--maybe-bg)}
+td.cond{min-width:9em}
+@media (max-width:640px){
+  table,tbody{display:block}
+  tr:first-child{display:none}
+  tr{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;padding:8px 12px;border-top:1px solid var(--line)}
+  td{display:block;border:0;padding:0;min-width:0}
+  td.sec{grid-column:1/-1;min-width:0;font-size:11px}
+  td.cond{min-width:0}
+  td.aim{white-space:normal;text-align:right}
+  td.note{grid-column:1/-1;margin-top:2px}
+  td:empty{display:none}
+  tr:has(td.aim:empty) td.cond{grid-column:1/-1}
+  tr.hit,tr.near{background:var(--ok-bg)} tr.near{background:var(--maybe-bg)}
+  tr.hit td,tr.near td{background:none}
+}
 td.sec{color:var(--mute);font-size:12px;min-width:7em}
 .note{font-size:12px;color:var(--mute)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
@@ -189,7 +204,7 @@ function tableEl(m, hits, near, openAll){
   const hd = el('tr'); ['区分','条件','狙い目','補足'].forEach(h=>hd.append(el('th',null,h))); t.append(hd);
   m.r.forEach((r,i)=>{
     const tr = el('tr', hits&&hits.has(i)?'hit':(near&&near.has(i)?'near':''));
-    tr.append(el('td','sec',r[0]), el('td',null,[r[1],r[2]].filter(Boolean).join(' / ')), el('td','aim',r[3]), el('td','note',r[4]));
+    tr.append(el('td','sec',r[0]), el('td','cond',[r[1],r[2]].filter(Boolean).join(' / ')), el('td','aim',r[3]), el('td','note',r[4]));
     t.append(tr);
   });
   wrap.append(t); d.append(wrap); return d;
